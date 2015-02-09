@@ -2,10 +2,16 @@
   "Contains the edda http client"
   (:require [clj-http.client :as http]
             [clj-http.util :refer [url-encode]]
+            [camel-snake-kebab.core :as csk]
             [clojure.string :as str]
             [mr-edda.core :refer :all]))
 
 (declare field->string)
+
+(defn eddaize
+  "Transform a string into one suitable for an edda url parameter"
+  [str]
+  (url-encode (csk/->camelCase (name str))))
 
 (defn fields->string
   "Takes a sequence of fields and transforms them into a field selector
@@ -21,15 +27,15 @@
   (if (map? field)
     (str/join ","
               (for [[k v] field]
-                (str (url-encode (name k)) (fields->string v))))
-    (url-encode (name field))))
+                (str (eddaize k) (fields->string v))))
+    (eddaize field)))
 
 (defn filters->string
   "Takes a filter map and transforms it into the matrix selector form used by the edda api
   e.g  {:x \"foo\", :y.z \"bar\"} => x=foo;y.z=bar  "
   [filter]
   (str/join ";" (for [[k v] filter]
-                  (str (url-encode (name k)) "=" (url-encode v)))))
+                  (str (eddaize k) "=" (url-encode v)))))
 
 (defn query->string
   "Takes an edda query map and turns it into a string
@@ -84,6 +90,14 @@
     x
     {key x}))
 
+(defn idiomize-names
+  [m]
+  (clojure.walk/postwalk
+   #(if (keyword? %)
+      (csk/->kebab-case %)
+      %)
+   m))
+
 (defrecord EddaHttpClient [base-url]
   IEddaClient
   (query* [this resource query]
@@ -92,7 +106,9 @@
                     :content-type "application/json"})
          :body
          force-sequential
-         (map #(force-map-like % :id)))))
+         (map (comp
+               idiomize-names
+               #(force-map-like % :id))))))
 
 (defn client
   "Returns an edda http client"
