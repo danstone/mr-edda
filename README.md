@@ -5,7 +5,7 @@ A little client for talking to [edda](http://github.com/Netflix/edda)
 ## Usage
 Include in your project.clj
 ```clojure
-[mr/mr-edda "0.1.0"]
+[mixradio/mr-edda "0.1.0"]
 ```
 ```clojure
 (require '[mr-edda.core :as edda]) ;;query
