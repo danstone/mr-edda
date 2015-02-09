@@ -1,6 +1,7 @@
 (ns mr-edda.http
   "Contains the edda http client"
   (:require [clj-http.client :as http]
+            [clj-http.util :refer [url-encode]]
             [clojure.string :as str]
             [mr-edda.core :refer :all]))
 
@@ -20,15 +21,15 @@
   (if (map? field)
     (str/join ","
               (for [[k v] field]
-                (str (name k) (fields->string v))))
-    (name field)))
+                (str (url-encode (name k)) (fields->string v))))
+    (url-encode (name field))))
 
 (defn filters->string
   "Takes a filter map and transforms it into the matrix selector form used by the edda api
   e.g  {:x \"foo\", :y.z \"bar\"} => x=foo;y.z=bar  "
   [filter]
   (str/join ";" (for [[k v] filter]
-                  (str (name k) "=" v))))
+                  (str (url-encode (name k)) "=" (url-encode v)))))
 
 (defn query->string
   "Takes an edda query map and turns it into a string
@@ -37,7 +38,7 @@
   (str
 
    (when-let [id (:id query)]
-     (str "/" id))
+     (str "/" (url-encode id)))
 
    ";"
 
@@ -53,11 +54,11 @@
    (when-let [filters (:filters query)]
      (filters->string filters))
 
-   (when-let [limit (:limit query)]
-     (str "_limit=" limit ";"))
-
    (when-let [fields (:fields query)]
-     (fields->string fields))))
+     (fields->string fields))
+
+    (when-let [limit (:limit query)]
+     (str "_limit=" limit ";"))))
 
 
 (defn build-url

@@ -21,4 +21,6 @@
 (deftest test-query-expansion
   (testing "queries are expanded into strings correctly"
     (are [a b] (= (query->string a) b)
-      {:id "foo"} "/foo;")))
+         {:id "foo qux+bar"} "/foo+qux%2Bbar;"
+         {:id "bar"
+          :at 1002333} "/bar;_at=1002333;")))
