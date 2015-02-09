@@ -31,4 +31,4 @@
   :expand? -> fully expand resultset, otherwise sometimes only the id will be returned.
               note: if you select fields via :fields, :expand will always be true"
   [client resource query]
-  (query client resource (auto-expand query)))
+  (query* client resource (auto-expand query)))

@@ -76,21 +76,29 @@
     x
     [x]))
 
+(defn force-map-like
+  "If x is not a map, make sure to return it under the specified key in a singleton map"
+  [x key]
+  (if (or (nil? x) (map? x))
+    x
+    {key x}))
+
 (defrecord EddaHttpClient [base-url]
   IEddaClient
   (query* [this resource query]
-    (-> (http/get (build-url base-url resource query)
-                  {:as :json
-                   :content-type "application/json"})
-        :body
-        force-sequential)))
+    (->> (http/get (build-url base-url resource query)
+                   {:as :json
+                    :content-type "application/json"})
+         :body
+         force-sequential
+         (map #(force-map-like % :id)))))
 
-(defn http-client
+(defn client
   "Returns an edda http client"
   [base-url]
   (->EddaHttpClient base-url))
 
-(def local-http-client
+(def local-client
   "A default edda http client that can be used for testing
    expects edda to be served from localhost:8080"
-  (http-client "http://localhost:8080"))
+  (client "http://localhost:8080"))
