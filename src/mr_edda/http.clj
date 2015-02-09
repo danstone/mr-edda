@@ -1,7 +1,6 @@
 (ns mr-edda.http
   "Contains the edda http client"
   (:require [clj-http.client :as http]
-            [cheshire.core :as json]
             [clojure.string :as str]
             [mr-edda.core :refer :all]))
 
@@ -51,7 +50,6 @@
    (when-let [at (:at query)]
      (str "_at=" at ";"))
 
-
    (when-let [filters (:filters query)]
      (filters->string filters))
 
@@ -74,9 +72,10 @@
 (defrecord EddaHttpClient [base-url]
   IEddaClient
   (query* [this resource query]
-    (-> (http/get (build-url base-url resource query))
-        :body
-        json/parse-string)))
+    (-> (http/get (build-url base-url resource query)
+                  {:as :json
+                   :content-type "application/json"})
+        :body)))
 
 (defn http-client
   "Returns an edda http client"
