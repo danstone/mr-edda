@@ -69,13 +69,21 @@
           (:name resource)
           (query->string query)))
 
+(defn force-sequential
+  "If x is not already sequential, return as a singleton vec"
+  [x]
+  (if (or (nil? x) (sequential? x))
+    x
+    [x]))
+
 (defrecord EddaHttpClient [base-url]
   IEddaClient
   (query* [this resource query]
     (-> (http/get (build-url base-url resource query)
                   {:as :json
                    :content-type "application/json"})
-        :body)))
+        :body
+        force-sequential)))
 
 (defn http-client
   "Returns an edda http client"

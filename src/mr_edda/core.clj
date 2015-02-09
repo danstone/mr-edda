@@ -3,8 +3,10 @@
 (defprotocol IEddaClient
   (query*
     [this resource query]
-    "Runs a query against the resource, not guaranteed to always return a sequence
-     - use `query` instead"))
+    "Runs a query against the resource
+     e.g a collection like mr-edda.collections/instances
+     returning a seq of results for the given query
+     see mr-edda.core/query for options"))
 
 (defn auto-expand
   "Takes an edda query map and returns a new query that will cause
@@ -29,7 +31,4 @@
   :expand? -> fully expand resultset, otherwise sometimes only the id will be returned.
               note: if you select fields via :fields, :expand will always be true"
   [client resource query]
-  (let [result (query* client resource (auto-expand query))]
-    (if (sequential? result)
-      result
-      (cons result nil))))
+  (query client resource (auto-expand query)))
