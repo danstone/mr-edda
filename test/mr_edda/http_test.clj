@@ -8,7 +8,7 @@
   (testing "fields are turned into strings correctly"
     (are [a b] (= (fields->string a) b)
       [:x :y {:a [:b :c]}] ":(x,y,a:(b,c))"
-      [:foo {"barDD" [:baz]} :qux] ":(foo,barDD:(baz),qux)")))
+      [:foo {:camel-case [:baz]} :qux] ":(foo,camelCase:(baz),qux)")))
 
 
 (deftest test-filter-expansion

@@ -35,7 +35,7 @@
   e.g  {:x \"foo\", :y.z \"bar\"} => x=foo;y.z=bar  "
   [filter]
   (str/join ";" (for [[k v] filter]
-                  (str (eddaize k) "=" (url-encode v)))))
+                  (str (eddaize k) "=" (url-encode (str v))))))
 
 (defn query->string
   "Takes an edda query map and turns it into a string
@@ -60,11 +60,11 @@
    (when-let [filters (:filters query)]
      (filters->string filters))
 
-   (when-let [fields (:fields query)]
-     (fields->string fields))
+   (when-let [limit (:limit query)]
+     (str "_limit=" limit ";"))
 
-    (when-let [limit (:limit query)]
-     (str "_limit=" limit ";"))))
+   (when-let [fields (:fields query)]
+     (fields->string fields))))
 
 
 (defn build-url

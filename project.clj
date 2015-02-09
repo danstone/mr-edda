@@ -5,6 +5,6 @@
   :dependencies [[org.clojure/clojure "1.6.0"]
                  [cheshire "5.3.1"]
                  [clj-http "1.0.1"]
-                 [camel-snake-kebab "0.3.0"]]
+                 [camel-snake-kebab "0.3.0" :exclusions [org.clojure/clojure]]]
 
   :plugins [[lein-release "1.0.5"]])
