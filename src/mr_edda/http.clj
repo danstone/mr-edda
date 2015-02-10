@@ -71,7 +71,7 @@
   "Based on the resource type returns a url to hit with a GET request in order
   to retrieve a sequence describing that resource"
   [base-uri resource query]
-  (format "%s/edda/api/v2/%s/%s%s" base-uri
+  (format "%s/api/v2/%s/%s%s" base-uri
           (:subpath resource)
           (:name resource)
           (query->string query)))
@@ -118,4 +118,4 @@
 (def local-client
   "A default edda http client that can be used for testing
    expects edda to be served from localhost:8080"
-  (client "http://localhost:8080"))
+  (client "http://localhost:8080/edda"))
