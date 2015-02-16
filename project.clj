@@ -1,4 +1,4 @@
-(defproject mixradio/mr-edda "0.1.0-SNAPSHOT"
+(defproject mixradio/mr-edda "0.1.0"
   :description "For querying edda"
   :url "http://github.com/mixradio/mr-edda"
   :license "https://github.com/mixradio/mr-edda/blob/master/LICENSE"
