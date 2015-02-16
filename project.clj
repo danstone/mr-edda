@@ -7,4 +7,5 @@
                  [clj-http "1.0.1"]
                  [camel-snake-kebab "0.3.0" :exclusions [org.clojure/clojure]]]
 
-  :plugins [[lein-release "1.0.5"]])
+  :plugins [[lein-release "1.0.5"]]
+  :lein-release {:deploy-via :clojars})
