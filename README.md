@@ -57,6 +57,3 @@ e.g
 Copyright © 2015 MixRadio
 
 [mr-edda is released under the 3-clause license ("New BSD License" or "Modified BSD License").](http://github.com/mixradio/mr-edda/blob/master/LICENSE)
-
-Distributed under the Eclipse Public License either version 1.0 or (at
-your option) any later version.
